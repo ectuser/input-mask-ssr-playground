@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/input-mask-ssr-playground",
+            "outputPath": "dist/input-mask-ssr-playground/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -97,6 +97,60 @@
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/input-mask-ssr-playground/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "input-mask-ssr-playground:build:development",
+              "serverTarget": "input-mask-ssr-playground:server:development"
+            },
+            "production": {
+              "browserTarget": "input-mask-ssr-playground:build:production",
+              "serverTarget": "input-mask-ssr-playground:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "input-mask-ssr-playground:build:production",
+              "serverTarget": "input-mask-ssr-playground:server:production"
+            },
+            "development": {
+              "browserTarget": "input-mask-ssr-playground:build:development",
+              "serverTarget": "input-mask-ssr-playground:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
